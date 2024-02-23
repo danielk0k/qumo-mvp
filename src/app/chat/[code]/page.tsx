@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 const welcome_msg =
   "Hey, nice meeting you today! To get started, please type 'ready' and I will begin asking you some questions for this research.";
@@ -30,7 +31,7 @@ export default function Chat({ params }: { params: { code: string } }) {
   useEffect(handleScroll, [messages]);
 
   return (
-    <main className="flex flex-col mx-auto max-w-2xl justify-center p-16">
+    <main className="flex flex-col mx-auto max-w-2xl justify-center p-4">
       <Card>
         <CardHeader>
           <CardTitle>Test Research</CardTitle>
@@ -45,12 +46,13 @@ export default function Chat({ params }: { params: { code: string } }) {
           ))}
         </CardContent>
         <form onSubmit={handleSubmit}>
-          <CardFooter>
+          <CardFooter className="space-x-2">
             <Input
               value={input}
               placeholder="Enter your response here"
               onChange={handleInputChange}
             />
+            <Button type="submit">Send</Button>
           </CardFooter>
         </form>
       </Card>

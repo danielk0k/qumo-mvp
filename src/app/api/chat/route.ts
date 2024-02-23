@@ -12,7 +12,7 @@ const questions = [
 export async function POST(req: Request) {
   const { messages } = await req.json();
   const i = (messages.length / 2) - 1
-  if (i > questions.length) {
+  if (i >= questions.length) {
     return new StreamingTextResponse(toReadableStream("Thank you for your participation. You may close this window."));
   }
   return new StreamingTextResponse(toReadableStream(questions[i]));
