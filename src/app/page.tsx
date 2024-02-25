@@ -10,16 +10,17 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import NewStudyDialog from "@/components/new-study-dialog";
+import supabaseClient from "@/lib/supabaseClient";
 
 export default async function ResearchDashboard() {
+  const { data } = await supabaseClient.from("research_collection").select();
   return (
-    <main className="flex flex-col mx-auto max-w-4xl min-h-screen justify-center p-2">
+    <main className="flex flex-col mx-auto max-w-4xl justify-center p-2">
       <Card>
         <CardHeader className="flex-row justify-between">
           <div className="space-y-1.5">
@@ -41,7 +42,7 @@ export default async function ResearchDashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* {data?.map((row, index) => (
+              {data?.map((row, index) => (
                 <TableRow key={index}>
                   <TableCell>{row.research_name}</TableCell>
                   <TableCell>{row.research_description}</TableCell>
@@ -50,7 +51,7 @@ export default async function ResearchDashboard() {
                     <Button variant="outline">Download</Button>
                   </TableCell>
                 </TableRow>
-              ))} */}
+              ))}
             </TableBody>
           </Table>
         </CardContent>

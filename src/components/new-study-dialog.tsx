@@ -23,7 +23,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import supabaseClient from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string(),
@@ -32,6 +34,8 @@ const formSchema = z.object({
 });
 
 export default function NewStudyDialog() {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,22 +47,23 @@ export default function NewStudyDialog() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // const { data, error } = await supabase
-      //   .from("research_collection")
-      //   .insert({
-      //     research_name: values.name,
-      //     research_description: values.description,
-      //     research_questions: JSON.stringify([values.questions]),
-      //   });
-      //   console.log(data, error)
+      const { data, error } = await supabaseClient
+        .from("research_collection")
+        .insert({
+          research_name: values.name,
+          research_description: values.description,
+          research_questions: JSON.stringify(values.questions.split(/\r?\n/)),
+        });
     } catch (error) {
       console.error(error);
     } finally {
       form.reset();
+      setOpen(false)
+      router.refresh()
     }
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Create New</Button>
       </DialogTrigger>
