@@ -1,5 +1,11 @@
-"use client";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Card,
   CardContent,
@@ -8,75 +14,46 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import NewStudyDialog from "@/components/new-study-dialog";
 
-const formSchema = z.object({
-  code: z.string(),
-});
-
-export default function Home() {
-  const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      code: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Call backend api to check code and redirect to chat page
-    router.push("/chat/" + values.code);
-  }
+export default async function ResearchDashboard() {
   return (
-    <main className="flex flex-col mx-auto max-w-lg justify-center p-16">
+    <main className="flex flex-col mx-auto max-w-4xl min-h-screen justify-center p-2">
       <Card>
-        <CardHeader>
-          <CardTitle>Qumo</CardTitle>
-          <CardDescription>
-            Your Digital Assistant For Automated Research
-          </CardDescription>
+        <CardHeader className="flex-row justify-between">
+          <div className="space-y-1.5">
+            <CardTitle>Research Dashboard</CardTitle>
+            <CardDescription>
+              Create new studies or download the responses from existing ones
+            </CardDescription>
+          </div>
+          <NewStudyDialog></NewStudyDialog>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Code</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the research code here to start
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit">Start</Button>
-            </form>
-          </Form>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Link</TableHead>
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {/* {data?.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell>{row.research_name}</TableCell>
+                  <TableCell>{row.research_description}</TableCell>
+                  <TableCell>{row.research_id}</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="outline">Download</Button>
+                  </TableCell>
+                </TableRow>
+              ))} */}
+            </TableBody>
+          </Table>
         </CardContent>
-        <CardFooter>
-          <p>Special login here</p>
-        </CardFooter>
       </Card>
     </main>
   );

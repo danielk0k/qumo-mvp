@@ -22,13 +22,11 @@ export default function Chat({ params }: { params: { code: string } }) {
     initialMessages: [{ role: "assistant", content: welcome_msg, id: "" }],
   });
 
-  const handleScroll = () => {
+  useEffect(() => {
     if (contentRef.current) {
       contentRef.current.scrollTop = contentRef.current.scrollHeight;
     }
-  };
-
-  useEffect(handleScroll, [messages]);
+  }, [messages]);
 
   return (
     <main className="flex flex-col mx-auto max-w-2xl justify-center p-4">
@@ -37,16 +35,24 @@ export default function Chat({ params }: { params: { code: string } }) {
           <CardTitle>Test Research</CardTitle>
           <CardDescription>5 questions to get to know you</CardDescription>
         </CardHeader>
-        <CardContent className="max-h-96 overflow-y-auto mb-8" ref={contentRef}>
-          {messages.map((m) => (
-            <div key={m.id} className="whitespace-pre-wrap my-2">
-              <p className="font-bold">{m.role === "user" ? "User" : "Qumo"}</p>
-              <p className="mt-1">{m.content}</p>
+        <CardContent
+          className="flex flex-col max-h-96 overflow-y-auto mb-4 odd:justify-end"
+          ref={contentRef}
+        >
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className="whitespace-pre-wrap my-2 rounded-md bg-accent p-4 max-w-xs"
+            >
+              <p className="font-bold">
+                {message.role === "user" ? "User" : "Qumo"}
+              </p>
+              <p className="mt-1">{message.content}</p>
             </div>
           ))}
         </CardContent>
         <form onSubmit={handleSubmit}>
-          <CardFooter className="space-x-2">
+          <CardFooter className="space-x-2 border-t pt-6">
             <Input
               value={input}
               placeholder="Enter your response here"
